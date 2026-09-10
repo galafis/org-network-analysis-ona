@@ -43,7 +43,10 @@ class TestBottleneckDetector:
         for b in results:
             assert isinstance(b.risk_level, RiskLevel)
             assert b.risk_level in (
-                RiskLevel.LOW, RiskLevel.MEDIUM, RiskLevel.HIGH, RiskLevel.CRITICAL
+                RiskLevel.LOW,
+                RiskLevel.MEDIUM,
+                RiskLevel.HIGH,
+                RiskLevel.CRITICAL,
             )
 
     def test_assess_knowledge_risk_returns_all_nodes(self, graph: nx.Graph) -> None:
@@ -62,9 +65,7 @@ class TestBottleneckDetector:
             assert isinstance(k.knowledge_score, float)
             assert 0.0 <= k.knowledge_score <= 1.0
 
-    def test_detect_department_silos_has_isolation_ratio(
-        self, graph: nx.Graph
-    ) -> None:
+    def test_detect_department_silos_has_isolation_ratio(self, graph: nx.Graph) -> None:
         """Each silo dict must include an isolation_ratio key."""
         detector = BottleneckDetector()
         silos = detector.detect_department_silos(graph)

@@ -68,15 +68,17 @@ class CentralityAnalyzer:
             # Composite: weighted average of normalized scores
             composite = round(0.25 * deg + 0.30 * bet + 0.15 * clo + 0.15 * eig + 0.15 * pr, 6)
 
-            results.append(CentralityResult(
-                employee_id=str(node),
-                degree=deg,
-                betweenness=bet,
-                closeness=clo,
-                eigenvector=eig,
-                pagerank=pr,
-                composite_score=composite,
-            ))
+            results.append(
+                CentralityResult(
+                    employee_id=str(node),
+                    degree=deg,
+                    betweenness=bet,
+                    closeness=clo,
+                    eigenvector=eig,
+                    pagerank=pr,
+                    composite_score=composite,
+                )
+            )
 
         results.sort(key=lambda x: x.composite_score, reverse=True)
 
@@ -92,7 +94,8 @@ class CentralityAnalyzer:
         )
 
         logger.info(
-            "Centrality analysis complete: {} nodes analyzed", len(results),
+            "Centrality analysis complete: {} nodes analyzed",
+            len(results),
         )
         return report
 

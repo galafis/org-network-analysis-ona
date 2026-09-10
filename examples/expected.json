@@ -1,0 +1,25 @@
+{
+  "synthetic": true,
+  "stats": {
+    "n_nodes": 4,
+    "n_edges": 2,
+    "density": 0.333333,
+    "avg_clustering": 0.0,
+    "n_connected_components": 2,
+    "avg_degree": 1.0,
+    "diameter": null
+  },
+  "edges": [
+    {
+      "source": "A",
+      "target": "B",
+      "weight": 0.75
+    },
+    {
+      "source": "B",
+      "target": "C",
+      "weight": 1.25
+    }
+  ],
+  "isolated_employee": "D"
+}

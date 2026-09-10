@@ -10,8 +10,14 @@ import pandas as pd
 from loguru import logger
 
 DEPARTMENTS = [
-    "Engineering", "Product", "Sales", "Marketing",
-    "HR", "Finance", "Operations", "Legal",
+    "Engineering",
+    "Product",
+    "Sales",
+    "Marketing",
+    "HR",
+    "Finance",
+    "Operations",
+    "Legal",
 ]
 SENIORITY_LEVELS = ["Junior", "Mid", "Senior", "Lead", "Director", "VP"]
 CHANNELS = ["slack", "email", "meeting"]
@@ -64,22 +70,57 @@ class ONADataGenerator:
         self.employees: list[EmployeeProfile] = []
         logger.info(
             "ONADataGenerator initialized: n={}, months={}, seed={}",
-            n_employees, n_months, seed,
+            n_employees,
+            n_months,
+            seed,
         )
 
     def generate_employees(self) -> pd.DataFrame:
         """Generate employee roster."""
         logger.info("Generating {} employee profiles", self.n_employees)
         first_names = [
-            "Ana", "Bruno", "Carlos", "Diana", "Eduardo", "Fernanda",
-            "Gabriel", "Helena", "Igor", "Julia", "Lucas", "Mariana",
-            "Nicolas", "Olivia", "Pedro", "Rafaela", "Samuel", "Tatiana",
-            "Vitor", "Yasmin", "Andre", "Beatriz", "Caio", "Daniela",
+            "Ana",
+            "Bruno",
+            "Carlos",
+            "Diana",
+            "Eduardo",
+            "Fernanda",
+            "Gabriel",
+            "Helena",
+            "Igor",
+            "Julia",
+            "Lucas",
+            "Mariana",
+            "Nicolas",
+            "Olivia",
+            "Pedro",
+            "Rafaela",
+            "Samuel",
+            "Tatiana",
+            "Vitor",
+            "Yasmin",
+            "Andre",
+            "Beatriz",
+            "Caio",
+            "Daniela",
         ]
         last_names = [
-            "Silva", "Santos", "Oliveira", "Souza", "Lima", "Pereira",
-            "Costa", "Ferreira", "Rodrigues", "Almeida", "Nascimento",
-            "Araujo", "Melo", "Barbosa", "Ribeiro", "Cardoso",
+            "Silva",
+            "Santos",
+            "Oliveira",
+            "Souza",
+            "Lima",
+            "Pereira",
+            "Costa",
+            "Ferreira",
+            "Rodrigues",
+            "Almeida",
+            "Nascimento",
+            "Araujo",
+            "Melo",
+            "Barbosa",
+            "Ribeiro",
+            "Cardoso",
         ]
 
         dept_sizes = self._compute_dept_sizes()
@@ -108,17 +149,19 @@ class ONADataGenerator:
                 self.employees.append(emp)
                 idx += 1
 
-        df = pd.DataFrame([
-            {
-                "employee_id": e.employee_id,
-                "name": e.name,
-                "department": e.department,
-                "seniority": e.seniority,
-                "tenure_years": e.tenure_years,
-                "location": e.location,
-            }
-            for e in self.employees
-        ])
+        df = pd.DataFrame(
+            [
+                {
+                    "employee_id": e.employee_id,
+                    "name": e.name,
+                    "department": e.department,
+                    "seniority": e.seniority,
+                    "tenure_years": e.tenure_years,
+                    "location": e.location,
+                }
+                for e in self.employees
+            ]
+        )
         logger.info("Generated {} employees across {} departments", len(df), len(dept_sizes))
         return df
 
@@ -135,14 +178,20 @@ class ONADataGenerator:
         """Generate interaction data across channels and months."""
         logger.info("Generating interactions for {} months", self.n_months)
         ids = employees_df["employee_id"].tolist()
-        depts = dict(zip(
-            employees_df["employee_id"], employees_df["department"],
-            strict=False,
-        ))
-        seniorities = dict(zip(
-            employees_df["employee_id"], employees_df["seniority"],
-            strict=False,
-        ))
+        depts = dict(
+            zip(
+                employees_df["employee_id"],
+                employees_df["department"],
+                strict=False,
+            )
+        )
+        seniorities = dict(
+            zip(
+                employees_df["employee_id"],
+                employees_df["seniority"],
+                strict=False,
+            )
+        )
         n = len(ids)
         interactions: list[dict[str, object]] = []
 
@@ -168,13 +217,15 @@ class ONADataGenerator:
                         prob = min(base_prob * dept_mult * senior_mult, 0.95)
                         count = int(self.rng.poisson(prob * 5))
                         if count > 0:
-                            interactions.append({
-                                "source_id": src,
-                                "target_id": tgt,
-                                "channel": channel,
-                                "month": month,
-                                "weight": count,
-                            })
+                            interactions.append(
+                                {
+                                    "source_id": src,
+                                    "target_id": tgt,
+                                    "channel": channel,
+                                    "month": month,
+                                    "weight": count,
+                                }
+                            )
 
         df = pd.DataFrame(interactions)
         logger.info("Generated {} interaction records", len(df))

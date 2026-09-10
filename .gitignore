@@ -32,3 +32,4 @@ Thumbs.db
 .idea/
 .vscode/
 *.ipynb_checkpoints/
+node_modules/

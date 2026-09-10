@@ -22,9 +22,7 @@ def employees_df(generator: ONADataGenerator) -> pd.DataFrame:
 
 
 @pytest.fixture(scope="session")
-def interactions_df(
-    generator: ONADataGenerator, employees_df: pd.DataFrame
-) -> pd.DataFrame:
+def interactions_df(generator: ONADataGenerator, employees_df: pd.DataFrame) -> pd.DataFrame:
     return generator.generate_interactions(employees_df)
 
 

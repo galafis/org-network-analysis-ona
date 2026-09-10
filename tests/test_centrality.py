@@ -59,8 +59,13 @@ class TestCentralityAnalyzer:
         assert isinstance(df, pd.DataFrame)
         assert len(df) == graph.number_of_nodes()
         expected_cols = {
-            "employee_id", "degree", "betweenness", "closeness",
-            "eigenvector", "pagerank", "composite_score",
+            "employee_id",
+            "degree",
+            "betweenness",
+            "closeness",
+            "eigenvector",
+            "pagerank",
+            "composite_score",
         }
         assert set(df.columns) == expected_cols
 

@@ -29,8 +29,11 @@ class TestReportGenerator:
         """Report dict must contain all top-level keys."""
         report = generate_json_report(analysis_result)
         required_keys = {
-            "graph_stats", "centrality", "bottleneck",
-            "community", "recommendations",
+            "graph_stats",
+            "centrality",
+            "bottleneck",
+            "community",
+            "recommendations",
         }
         assert required_keys.issubset(set(report.keys()))
 

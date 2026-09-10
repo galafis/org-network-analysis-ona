@@ -93,11 +93,16 @@ class BottleneckDetector:
                 risk = RiskLevel.MEDIUM
                 reason = "Elevated betweenness: moderate bottleneck risk"
 
-            results.append(BottleneckResult(
-                employee_id=str(node), betweenness=round(bet, 6),
-                degree=degree, departments_connected=n_depts,
-                risk_level=risk, reason=reason,
-            ))
+            results.append(
+                BottleneckResult(
+                    employee_id=str(node),
+                    betweenness=round(bet, 6),
+                    degree=degree,
+                    departments_connected=n_depts,
+                    risk_level=risk,
+                    reason=reason,
+                )
+            )
 
         results.sort(key=lambda x: x.betweenness, reverse=True)
         logger.info("Found {} bottlenecks", len(results))
@@ -108,8 +113,12 @@ class BottleneckDetector:
         logger.info("Assessing knowledge loss risk")
         betweenness = nx.betweenness_centrality(graph, weight="weight")
         seniority_weights = {
-            "Junior": 0.2, "Mid": 0.4, "Senior": 0.6,
-            "Lead": 0.8, "Director": 0.9, "VP": 1.0,
+            "Junior": 0.2,
+            "Mid": 0.4,
+            "Senior": 0.6,
+            "Lead": 0.8,
+            "Director": 0.9,
+            "VP": 1.0,
         }
         max_degree = max((d for _, d in graph.degree()), default=1)
         results: list[KnowledgeRiskResult] = []
@@ -134,8 +143,11 @@ class BottleneckDetector:
             betweenness_w = min(betweenness.get(node, 0.0) / 0.3, 1.0)
 
             knowledge_score = round(
-                0.25 * seniority_w + 0.25 * tenure_w
-                + 0.25 * connectivity_w + 0.25 * betweenness_w, 4,
+                0.25 * seniority_w
+                + 0.25 * tenure_w
+                + 0.25 * connectivity_w
+                + 0.25 * betweenness_w,
+                4,
             )
 
             if knowledge_score >= 0.80:
@@ -147,12 +159,18 @@ class BottleneckDetector:
             else:
                 risk, difficulty = RiskLevel.LOW, "Low: standard timeline"
 
-            results.append(KnowledgeRiskResult(
-                employee_id=str(node), department=department,
-                seniority=seniority, tenure_years=tenure,
-                unique_connections=unique, knowledge_score=knowledge_score,
-                risk_level=risk, replacement_difficulty=difficulty,
-            ))
+            results.append(
+                KnowledgeRiskResult(
+                    employee_id=str(node),
+                    department=department,
+                    seniority=seniority,
+                    tenure_years=tenure,
+                    unique_connections=unique,
+                    knowledge_score=knowledge_score,
+                    risk_level=risk,
+                    replacement_difficulty=difficulty,
+                )
+            )
 
         results.sort(key=lambda x: x.knowledge_score, reverse=True)
         return results
@@ -166,16 +184,19 @@ class BottleneckDetector:
         silos: list[dict[str, object]] = []
         for dept, nodes in departments.items():
             internal = graph.subgraph(nodes).number_of_edges()
-            external = sum(
-                1 for n in nodes for nb in graph.neighbors(n) if nb not in nodes
-            )
+            external = sum(1 for n in nodes for nb in graph.neighbors(n) if nb not in nodes)
             total = internal + external
             ratio = round(internal / total if total > 0 else 1.0, 4)
-            silos.append({
-                "department": dept, "n_employees": len(nodes),
-                "internal_edges": internal, "external_edges": external,
-                "isolation_ratio": ratio, "is_silo": ratio > 0.80,
-            })
+            silos.append(
+                {
+                    "department": dept,
+                    "n_employees": len(nodes),
+                    "internal_edges": internal,
+                    "external_edges": external,
+                    "isolation_ratio": ratio,
+                    "is_silo": ratio > 0.80,
+                }
+            )
         silos.sort(key=lambda x: float(str(x["isolation_ratio"])), reverse=True)
         return silos
 

@@ -95,15 +95,11 @@ def render_centrality(result: FullAnalysisResult) -> None:
     df = analyzer.get_centrality_dataframe(result.centrality)
 
     st.subheader("Top Connectors (Degree)")
-    top_connectors = df.nlargest(10, "degree")[
-        ["employee_id", "degree", "composite_score"]
-    ]
+    top_connectors = df.nlargest(10, "degree")[["employee_id", "degree", "composite_score"]]
     st.dataframe(top_connectors, use_container_width=True)
 
     st.subheader("Top Brokers (Betweenness)")
-    top_brokers = df.nlargest(10, "betweenness")[
-        ["employee_id", "betweenness", "composite_score"]
-    ]
+    top_brokers = df.nlargest(10, "betweenness")[["employee_id", "betweenness", "composite_score"]]
     st.dataframe(top_brokers, use_container_width=True)
 
     st.subheader("Top Influencers (Eigenvector)")
@@ -140,8 +136,7 @@ def render_bottlenecks(result: FullAnalysisResult) -> None:
 
     st.subheader("Knowledge Risk Assessment")
     high_risk = [
-        k for k in result.bottleneck.knowledge_risks
-        if k.risk_level.value in ("critical", "high")
+        k for k in result.bottleneck.knowledge_risks if k.risk_level.value in ("critical", "high")
     ]
     if high_risk:
         st.write(f"**{len(high_risk)}** employees with high/critical knowledge risk")
@@ -212,10 +207,7 @@ def render_recommendations(result: FullAnalysisResult) -> None:
     for rec in exec_report.recommendations:
         priority_colors = {"high": "red", "medium": "orange", "low": "blue"}
         color = priority_colors.get(rec.priority.value, "gray")
-        st.markdown(
-            f"**[{rec.priority.value.upper()}]** :{color}[{rec.category}] "
-            f"- {rec.title}"
-        )
+        st.markdown(f"**[{rec.priority.value.upper()}]** :{color}[{rec.category}] - {rec.title}")
         st.write(rec.description)
         if rec.action_items:
             st.write("**Action Items:**")

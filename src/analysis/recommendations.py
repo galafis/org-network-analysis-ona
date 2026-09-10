@@ -65,9 +65,7 @@ class RecommendationEngine:
         recommendations.extend(self._check_key_person_overlap())
 
         recommendations.sort(
-            key=lambda r: (
-                {Priority.HIGH: 0, Priority.MEDIUM: 1, Priority.LOW: 2}[r.priority]
-            ),
+            key=lambda r: {Priority.HIGH: 0, Priority.MEDIUM: 1, Priority.LOW: 2}[r.priority],
         )
 
         risk_score = self._compute_risk_score()
@@ -89,7 +87,8 @@ class RecommendationEngine:
         """Check for critical bottleneck nodes."""
         results: list[Recommendation] = []
         critical = [
-            b for b in self.bottleneck.bottlenecks
+            b
+            for b in self.bottleneck.bottlenecks
             if b.risk_level in (RiskLevel.CRITICAL, RiskLevel.HIGH)
         ]
         if not critical:
@@ -118,7 +117,8 @@ class RecommendationEngine:
         """Check for knowledge concentration risk."""
         results: list[Recommendation] = []
         high_risk = [
-            k for k in self.bottleneck.knowledge_risks
+            k
+            for k in self.bottleneck.knowledge_risks
             if k.risk_level in (RiskLevel.CRITICAL, RiskLevel.HIGH)
         ]
         if not high_risk:
@@ -147,10 +147,7 @@ class RecommendationEngine:
     def _check_silo_detection(self) -> list[Recommendation]:
         """Check for departmental silos."""
         results: list[Recommendation] = []
-        silos = [
-            s for s in self.bottleneck.department_silos
-            if s.get("is_silo") is True
-        ]
+        silos = [s for s in self.bottleneck.department_silos if s.get("is_silo") is True]
         if not silos:
             return results
 
@@ -255,14 +252,16 @@ class RecommendationEngine:
 
         # Bottleneck contribution (up to 30)
         critical_bottlenecks = sum(
-            1 for b in self.bottleneck.bottlenecks
+            1
+            for b in self.bottleneck.bottlenecks
             if b.risk_level in (RiskLevel.CRITICAL, RiskLevel.HIGH)
         )
         score += min(critical_bottlenecks * 6.0, 30.0)
 
         # Knowledge risk contribution (up to 30)
         critical_knowledge = sum(
-            1 for k in self.bottleneck.knowledge_risks
+            1
+            for k in self.bottleneck.knowledge_risks
             if k.risk_level in (RiskLevel.CRITICAL, RiskLevel.HIGH)
         )
         total_nodes = len(self.bottleneck.knowledge_risks) or 1
@@ -270,10 +269,7 @@ class RecommendationEngine:
         score += knowledge_ratio * 30.0
 
         # Silo contribution (up to 20)
-        silo_count = sum(
-            1 for s in self.bottleneck.department_silos
-            if s.get("is_silo") is True
-        )
+        silo_count = sum(1 for s in self.bottleneck.department_silos if s.get("is_silo") is True)
         total_depts = len(self.bottleneck.department_silos) or 1
         score += (silo_count / total_depts) * 20.0
 

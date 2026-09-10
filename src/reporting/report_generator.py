@@ -42,9 +42,7 @@ def generate_json_report(
             "top_influencers": result.centrality.top_influencers,
         },
         "bottleneck": {
-            "bottlenecks": [
-                _serialize_bottleneck(b) for b in result.bottleneck.bottlenecks
-            ],
+            "bottlenecks": [_serialize_bottleneck(b) for b in result.bottleneck.bottlenecks],
             "knowledge_risks": [
                 _serialize_knowledge_risk(k) for k in result.bottleneck.knowledge_risks
             ],
@@ -59,8 +57,7 @@ def generate_json_report(
             "risk_score": result.recommendations.risk_score,
             "summary": result.recommendations.summary,
             "recommendations": [
-                _serialize_recommendation(r)
-                for r in result.recommendations.recommendations
+                _serialize_recommendation(r) for r in result.recommendations.recommendations
             ],
         },
     }

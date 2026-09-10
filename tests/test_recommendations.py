@@ -27,9 +27,7 @@ class TestRecommendationEngine:
         engine = RecommendationEngine(centrality, bottleneck, community)
         return engine.generate()
 
-    def test_generate_returns_executive_report(
-        self, exec_report: ExecutiveReport
-    ) -> None:
+    def test_generate_returns_executive_report(self, exec_report: ExecutiveReport) -> None:
         """generate must return an ExecutiveReport."""
         assert isinstance(exec_report, ExecutiveReport)
 
@@ -43,9 +41,7 @@ class TestRecommendationEngine:
         assert isinstance(exec_report.summary, str)
         assert len(exec_report.summary) > 0
 
-    def test_recommendation_priorities_valid(
-        self, exec_report: ExecutiveReport
-    ) -> None:
+    def test_recommendation_priorities_valid(self, exec_report: ExecutiveReport) -> None:
         """All recommendation priorities must be valid Priority enum values."""
         for r in exec_report.recommendations:
             assert isinstance(r.priority, Priority)
@@ -83,9 +79,7 @@ class TestRecommendationEngine:
         priorities = {r.priority for r in report.recommendations}
         assert Priority.HIGH in priorities
 
-    def test_recommendations_sorted_by_priority(
-        self, exec_report: ExecutiveReport
-    ) -> None:
+    def test_recommendations_sorted_by_priority(self, exec_report: ExecutiveReport) -> None:
         """Recommendations should be sorted HIGH -> MEDIUM -> LOW."""
         order = {Priority.HIGH: 0, Priority.MEDIUM: 1, Priority.LOW: 2}
         prev = -1
